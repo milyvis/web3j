@@ -1,40 +1,40 @@
 ---
 name: retro
-description: Retrospective on how a session went — mine friction into CODING_STANDARDS.md, prune what no longer applies, and land it as a PR.
+description: STUB — not functional. Raw design ideas for a retrospective skill, awaiting a /writing-for-agents pass.
 disable-model-invocation: true
-argument-hint: "Nothing, to retro this session — or point it at a past transcript"
 ---
 
-# Retro
+# Retro (stub)
 
-Stub: v1 of the **steering hygiene** lens only, the one specified in enough detail to build. Three more lenses were sketched while designing this skill and aren't built yet — see the bottom of this file.
+Not a working skill. This file is raw material for a future `/writing-for-agents` pass — every idea from the design conversation, uncut, none of it yet reduced to steps, reference, branches, or pruned for no-ops. Treat every section below as a candidate, not an instruction. Do not follow this file as a process.
 
-This is the compound-engineering promise — the process improves over time — without compound engineering's failure mode: models are bad at improving their own behavior unsupervised. So `retro` never edits a steering file directly. It proposes, on a branch, as a PR. A human reads the diff before any standard changes.
+## Premise
 
-## Friction
+- Runs at the end of a conversation: a retrospective on how the conversation went.
+- The compound-engineering promise — the process improves over time — without compound engineering's failure mode: models are bad at improving their own behavior unsupervised. Whatever this becomes, it proposes; it never applies.
+- The opportunity: tie together four things this codebase already has, in one pass — steering files (`CLAUDE.md`/`AGENTS.md`), `CODING_STANDARDS.md`, the skills themselves, and the `writing-for-agents` discipline that governs how all three should be written.
 
-The raw material of a retro pass: a place in this session where you corrected the agent, re-explained something already true, or the agent visibly floundered — retried a tool call, misread a file, took a wrong turn before self-correcting. Mine the conversation for these first. Don't invent friction that didn't happen.
+## Ideas to fold in — one per raw idea, uncut
 
-## Routing a piece of friction
+1. **Determinism hunt.** Somewhere in the session, the agent (or the user) made a judgment call that had to be made every time — a piece of reasoning repeated rather than automated. Flag these as their own category, distinct from `CODING_STANDARDS.md` prose: a determinism candidate isn't a rule to remember, it's a rule to stop needing — a lint rule, a script, a hook, a type, a tool.
+2. **CLAUDE.md → CODING_STANDARDS.md migration.** Steering instructions that have accreted in `CLAUDE.md` belong in `CODING_STANDARDS.md` instead. Retro should actively look for steering prose sitting in the wrong file and propose *moving* it, not just propose new rules.
+3. **Branches, from `writing-for-agents`.** Apply the branch vocabulary (a branch = a distinct case a document handles) to the documents retro touches. E.g. a "review branch": when reviewing a piece of code, name the distinct cases its behavior handles, and check the standards file covers each as its own branch rather than one blurred rule.
+4. **Tool economy.** Opinions on tool calls and tool setups: find tools that were expensive this session — many calls, high latency, high token cost, retries — by reading the actual session JSONL, not impressions, and propose cheaper tool setups.
+5. **Navigation pointers.** Look for hard-to-reach parts of the codebase this session struggled to find — places that needed a highway pointer in `CLAUDE.md`/`AGENTS.md` and didn't have one — and propose adding them.
+6. **Codebase design.** Apply the `codebase-design` deep-module/deletion-test vocabulary to flag shallow modules or deletion-test failures the session bumped into — same lens as `/improve-codebase-architecture`, but sourced from this session's actual friction rather than a cold scan.
+7. **Prune, not just add.** Any pass over `CODING_STANDARDS.md` should also run the deletion test against *existing* rules and propose removals — a retro that only adds becomes exactly the mess this idea exists to prevent.
+8. **Architecture — undecided, two competing shapes:**
+   - **One skill, several sub-agents** — each lens above (determinism, tool economy, navigation, codebase design, steering-file hygiene) runs as a parallel sub-agent, each pointed at its own reference doc living inside this skill's folder.
+   - **One skill, no sub-agents** — the conversation is already fully in context and there's no exploration needed for the single-session case, so just hand the one in-context agent a checklist of lenses and let it work through them directly. Sub-agents may only earn their keep for the multi-session case below, where transcripts genuinely aren't in context yet.
+9. **Multi-session mode.** Fan out sub-agents across several past transcripts in the same project before drawing conclusions, so one session's idiosyncrasy doesn't get promoted to a standing rule.
+10. **Never writes directly.** Whatever shape this takes, the output is a proposed diff on a branch, landed as a PR — never a direct commit to `CODING_STANDARDS.md`, `CLAUDE.md`, or anywhere else.
 
-Not every finding is a `CODING_STANDARDS.md` candidate. Picking the wrong destination just adds noise to the wrong document:
+## Reference material for the eventual write-up
 
-- **CODING_STANDARDS.md** — a rule about how code should be written or reviewed, enforceable by `/code-review` at review time. The default destination, and the only one this skill should propose without asking.
-- **AGENTS.md / CLAUDE.md** — a navigation miss, not a behavior miss: the agent burned turns finding something a pointer would have handed it directly. Flag it, don't write it — these files stay hand-curated, a few highways, not a log.
-- **CONTEXT.md** — a domain-language gap. Flag it for a `domain-modeling` pass rather than writing it inline; that skill's active build/sharpen discipline is a different shape of work than a retro proposal.
+- `writing-for-agents` — branches, context pointers, information hierarchy, pruning/no-ops vocabulary. The tool this stub is meant to be fed through.
+- `codebase-design` — deletion test, deep module vocabulary, for idea 6.
+- `code-review` — precedent for the parallel-sub-agent, non-reranked aggregation shape, relevant to idea 8's first option.
 
-If a piece of friction fits none of the three, drop it. A retro that force-fits everything into `CODING_STANDARDS.md` is the CLAUDE.md-bloat failure mode this skill exists to avoid.
+## Next step
 
-## Process
-
-1. Mine friction from the current conversation (see above).
-2. Route each finding per the section above. Only the `CODING_STANDARDS.md` candidates get written up as a diff; anything else becomes a short list for the human to act on separately, not part of the PR.
-3. Read the repo's `CODING_STANDARDS.md` in full, not just the new candidates, and run the deletion test against every existing rule — call the Skill tool with "codebase-design" for its exact wording. A rule earns removal when deleting it changes nothing: the behavior it once corrected doesn't recur, or a newer rule already subsumes it. Propose deletions alongside additions in the same diff. A retro that only adds becomes the mess a standards file turns into when nothing is ever cut.
-4. Draft the diff. Branch, commit, open the PR, and hand the human a summary of what's added, what's cut, and why for each. Never write directly to `CODING_STANDARDS.md` — the whole point of routing everything through review is that the model is the one proposing its own constraints, so the human is the gate, not a formality.
-5. List any navigation or domain-language findings that survived step 2 after the PR link. They are not part of the diff.
-
-## Not yet built
-
-- **Tool economy** — read the session transcript for expensive or repeated tool calls and propose cheaper tool setups. No reference vocabulary exists yet for this anywhere in the repo.
-- **Navigation audit** — go further than flagging (see Routing above) and actually draft the `AGENTS.md`/`CLAUDE.md` highway pointers, rather than leaving them for the human.
-- **Multi-session mode** — fan out sub-agents across several past transcripts in the same project before mining friction, so one session's idiosyncrasy doesn't get promoted to a standing rule. The shape: parallel Explore sub-agents, one per transcript, findings reconciled before routing.
+Run `/writing-for-agents` against this file: pick an information-hierarchy tier for each idea above (in-file step vs in-file reference vs disclosed reference), settle idea 8, and cut whatever turns out to be a no-op once the real process is written.

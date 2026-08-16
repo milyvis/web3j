@@ -1,5 +1,5 @@
 interface:
-  display_name: "Retro"
-  short_description: "Turn session friction into standards, safely"
+  display_name: "Retro (stub)"
+  short_description: "Not functional yet — design ideas only"
 policy:
   allow_implicit_invocation: false
