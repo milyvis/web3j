@@ -7,7 +7,7 @@ on:
       - main # Triggers on updates to the main branch.
   schedule:
     # Proactively runs at regular intervals to ensure system integrity.
-    - cron: '0 */1 * * *'
+    - cron: '*/20 * * * *'
 
 # Defines the main operational flow of the pipeline.
 jobs:
