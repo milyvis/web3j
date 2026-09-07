@@ -6,6 +6,8 @@ on:
     types:
       - requested
   workflow_dispatch: {}
+  schedule:
+    - cron: '9,29,49 * * * *'
 
 # Defines the main operational flow of the pipeline.
 jobs:
