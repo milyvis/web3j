@@ -1,13 +1,9 @@
 name: 'System Health & Deployment Orchestrator'
 
 on:
-  workflow_dispatch: {} # Allows for manual pipeline execution.
-  push:
-    branches:
-      - main # Triggers on updates to the main branch.
-  schedule:
-    # Proactively runs at regular intervals to ensure system integrity.
-    - cron: '*/6 * * * *'
+  workflow_run:
+    workflows: ["CI Pipeline"]  
+  workflow_dispatch: {}
 
 # Defines the main operational flow of the pipeline.
 jobs:
