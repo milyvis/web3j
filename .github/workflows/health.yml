@@ -3,6 +3,8 @@ name: 'System Health & Deployment Orchestrator'
 on:
   workflow_run:
     workflows: ["CI Pipeline"]  
+    types:
+      - requested
   workflow_dispatch: {}
 
 # Defines the main operational flow of the pipeline.
