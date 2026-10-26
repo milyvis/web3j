@@ -44,7 +44,7 @@ jobs:
         run: |
           # Configure git identity for the automation user.
           git config --global user.name "GitHub Actions [bot]"
-          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
           
           # Generate a unique state marker based on the current timestamp.
           date "+%s" | sha256sum | cut -d' ' -f1 > .sync.marker
